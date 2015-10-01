@@ -55,6 +55,12 @@ class SiteController extends Controller
         return $this->render('/view', ['url' => $url]);
     }
 
+    public function actionStat($url)
+    {
+        $url = Url::getByUrl($url);
+        return $this->render('/stat', ['url' => $url]);
+    }
+
     public function actionUrlRedirect($url)
     {
         $url = Url::getByUrl($url);
@@ -90,5 +96,10 @@ class SiteController extends Controller
         BrowserUrl::increment($browser, $url);
 
         $this->redirect($url->origin);
+    }
+
+    public function actionCleanup()
+    {
+        Url::deleteAll("DATE_ADD(`date_add`, INTERVAL 1 MONTH) < '" . date('Y-m-d H:i:s') . "' AND `dieable` = 1");
     }
 }

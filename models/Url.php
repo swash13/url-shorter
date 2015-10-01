@@ -20,6 +20,8 @@ class Url extends ActiveRecord
             [['short'], 'string', 'max' => 8],
             [['date_add'], 'date', 'format' => 'yyyy-MM-dd HH:mm:ss'],
             [['date_add'], 'default', 'value' => function() { return date('Y-m-d H:i:s'); }],
+            [['dieable'], 'default', 'value' => 0],
+            [['dieable'], 'number', 'max' => 1]
         ];
     }
 
@@ -36,5 +38,10 @@ class Url extends ActiveRecord
     public function getBrowsers()
     {
         return Url::hasMany(BrowserUrl::className(), ['id_url' => 'id']);
+    }
+
+    public function getStatExist()
+    {
+        return $this->getCountries()->count() && $this->getBrowsers()->count();
     }
 }
